@@ -21,3 +21,5 @@ jobs:
       - name: Block push if no allowed files have been changed
         if: ${{ steps.determine_changes.outputs.valid == 'false' }}
         run: echo "No changes to allowed files. Blocking push." && exit 1
+    outputs:
+      status: ${{ job.status }}
