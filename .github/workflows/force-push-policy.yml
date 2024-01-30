@@ -1,0 +1,25 @@
+name: force-push-policy
+on:
+  push:
+    branches:
+      - feature/poc-push
+jobs:
+  allow_push:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check file changes
+        id: check_files
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Fetch all history for accurate diff
+      - name: Determine if files changed are allowed
+        id: determine_changes
+        run: ./sh_validate_changes_on_master.sh
+      - name: Allow push if allowed files changed
+        if: ${{ steps.determine_changes.outputs.valid == 'true' }}
+        run: echo "Files changed. Allow push."
+      - name: Block push if no allowed files have been changed
+        if: ${{ steps.determine_changes.outputs.valid == 'false' }}
+        run: echo "No changes to allowed files. Blocking push." && exit 1
+      - name: Block all to test
+        run: echo "You are blocked" && exit 1
