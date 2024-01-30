@@ -283,3 +283,5 @@ tasks.register('installGitHooks') {
 tasks.named('wrapper') {
     gradleVersion = '8.5'
 }
+
+// invalid change
